@@ -55,9 +55,9 @@ function Navbar() {
                     <Link to="/">Home</Link>
                 </li>
                 <li className="link">
-                    <Link to="#appointments">Appointments</Link>
+                    <Link to="/instant-consultation">Appointments</Link>
                 </li>
-                
+
                 {/* Conditional Rendering based on Authentication state */}
                 {isLoggedIn ? (
                     <>
@@ -84,7 +84,7 @@ function Navbar() {
                 )}
             </ul>
         </nav>
-        
+
     );
 }
 
