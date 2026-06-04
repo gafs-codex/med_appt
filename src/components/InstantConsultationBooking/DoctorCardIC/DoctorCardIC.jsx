@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './DoctorCardIC.css';
 import AppointmentForm from '../AppointmentFormIC/AppointmentFormIC';
-import ReviewForm from '../ReviewForm/ReviewForm'; // Ensure this path is correct
+import ReviewForm from '../../ReviewForm/ReviewForm';
 
 const DoctorCard = ({ name, speciality, experience, ratings }) => {
   const [showForm, setShowForm] = useState(false);
