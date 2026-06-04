@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './DoctorCardIC.css';
-import AppointmentFormIC from '../AppointmentFormIC/AppointmentFormIC';
+import AppointmentForm from '../AppointmentFormIC/AppointmentFormIC';
+import ReviewForm from '../ReviewForm/ReviewForm'; // Ensure this path is correct
+
 const DoctorCard = ({ name, speciality, experience, ratings }) => {
   const [showForm, setShowForm] = useState(false);
   const [appointmentData, setAppointmentData] = useState(null);
@@ -43,6 +45,7 @@ const DoctorCard = ({ name, speciality, experience, ratings }) => {
             )}
           </div>
 
+          {/* Render Appointment Form */}
           {showForm && (
             <AppointmentForm
               doctorName={name}
@@ -50,11 +53,15 @@ const DoctorCard = ({ name, speciality, experience, ratings }) => {
               onSubmit={handleBooking}
             />
           )}
+
+          {/* Integrated ReviewForm */}
+          <div className="doctor-card-review-container" style={{ marginTop: '10px' }}>
+            <ReviewForm doctorName={name} doctorSpeciality={speciality} />
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-// Keep your existing DoctorList component below
 export default DoctorCard;
