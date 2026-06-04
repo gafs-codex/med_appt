@@ -5,6 +5,7 @@ import Landing_Page from './Components/Landing_Page/Landing_Page';
 import Sign_Up from './Components/Sign_Up/Sign_Up';
 import Login from './Components/Login/Login';
 import InstantConsultation from './Components/InstantConsultationBooking/InstantConsultation';
+import Notification from './components/Notification/Notification';
 // import Home from './Components/Home/Home';
 
 function App() {
@@ -12,13 +13,15 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Landing_Page />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Sign_Up />} />
+        <Notification>
+          <Routes>
+            <Route path="/" element={<Landing_Page />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Sign_Up />} />
 
-          <Route path="/instant-consultation" element={<InstantConsultation />} />
-        </Routes>
+            <Route path="/instant-consultation" element={<InstantConsultation />} />
+          </Routes>
+        </Notification>
       </BrowserRouter>
     </div>
   );
