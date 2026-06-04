@@ -7,7 +7,7 @@ import Login from './Components/Login/Login';
 import InstantConsultation from './Components/InstantConsultationBooking/InstantConsultation';
 import Notification from './components/Notification/Notification';
 import ProfileCard from './Components/ProfileCard/ProfileCard';
-// import Home from './Components/Home/Home';
+import ReportsLayout from './Components/ReportsLayout/ReportsLayout';
 
 function App() {
   return (
@@ -19,8 +19,10 @@ function App() {
             <Route path="/" element={<Landing_Page />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Sign_Up />} />
-
             <Route path="/instant-consultation" element={<InstantConsultation />} />
+            {/* Added Routes */}
+            <Route path="/profile" element={<ProfileCard />} />
+            <Route path="/reports" element={<ReportsLayout />} />
           </Routes>
         </Notification>
       </BrowserRouter>
