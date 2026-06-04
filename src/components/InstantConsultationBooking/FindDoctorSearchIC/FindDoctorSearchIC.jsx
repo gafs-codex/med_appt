@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './FindDoctorSearch.css';
+import './FindDoctorSearchIC.css';
 import { useNavigate } from 'react-router-dom';
 
 const initSpeciality = [
