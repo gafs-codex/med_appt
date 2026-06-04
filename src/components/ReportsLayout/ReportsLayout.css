@@ -1,10 +1,70 @@
-.btn-view, .btn-download {
-    margin-right: 10px;
-    padding: 5px 10px;
-    text-decoration: none;
+/* Container styling to match the application's clean look */
+.reports-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reports-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Table styling */
+.reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.reports-table th,
+.reports-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.reports-table th {
+    background-color: #f8f9fa;
+    color: #555;
+    font-weight: 600;
+}
+
+.reports-table tr:hover {
+    background-color: #f1f7ff;
+}
+
+/* Button grouping */
+.btn-view,
+.btn-download {
+    padding: 6px 12px;
+    margin-right: 8px;
+    font-size: 0.85rem;
+    border: none;
     border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-view {
+    background-color: #28a745;
     color: white;
 }
 
-.btn-view { background-color: #28a745; }
-.btn-download { background-color: #007bff; }
+.btn-view:hover {
+    background-color: #218838;
+}
+
+.btn-download {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-download:hover {
+    background-color: #0069d9;
+}
