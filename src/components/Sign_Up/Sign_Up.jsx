@@ -1,87 +1,82 @@
 import React, { useState } from 'react';
 import './Sign_Up.css';
+import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config'; // Adjusted to match your directory nesting level
 
-function Sign_Up() {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        password: ''
-    });
-    const [errors, setErrors] = useState({});
+const Sign_Up = () => {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
+    const [showerr, setShowerr] = useState(''); 
+    const navigate = useNavigate(); 
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    const register = async (e) => {
+        e.preventDefault(); 
 
-    const validateForm = () => {
-        let formErrors = {};
-        if (!formData.name.trim()) formErrors.name = "Name is required";
+        const response = await fetch(`${API_URL}/api/auth/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                password: password,
+                phone: phone,
+            }),
+        });
 
-        // Email validation regex
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!formData.email) {
-            formErrors.email = "Email is required";
-        } else if (!emailRegex.test(formData.email)) {
-            formErrors.email = "Invalid email format";
-        }
+        const json = await response.json(); 
 
-        // Phone number validation rule (Must be exactly 10 digits)
-        const phoneRegex = /^\d{10}$/;
-        if (!formData.phone) {
-            formErrors.phone = "Phone number is required";
-        } else if (!phoneRegex.test(formData.phone)) {
-            formErrors.phone = "Phone number must be exactly 10 digits";
-        }
+        if (json.authtoken) {
+            sessionStorage.setItem("auth-token", json.authtoken);
+            sessionStorage.setItem("name", name);
+            sessionStorage.setItem("phone", phone);
+            sessionStorage.setItem("email", email);
 
-        if (!formData.password) {
-            formErrors.password = "Password is required";
-        } else if (formData.password.length < 6) {
-            formErrors.password = "Password must be at least 6 characters";
-        }
-
-        setErrors(formErrors);
-        return Object.keys(formErrors).length === 0;
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (validateForm()) {
-            console.log("Sign Up Form Submitted Successfully", formData);
-            // Form submission logic to backend API goes here
+            navigate("/");
+            window.location.reload(); 
+        } else {
+            if (json.errors) {
+                for (const error of json.errors) {
+                    setShowerr(error.msg); 
+                }
+            } else {
+                setShowerr(json.error);
+            }
         }
     };
 
     return (
-        <div className="container">
+        <div className="container" style={{marginTop:'5%'}}>
             <div className="signup-grid">
-                <div className="signup-text">
-                    <h1>Sign Up</h1>
-                    <p>Already a member? <a href="/login" style={{ color: '#2196f3' }}> Login</a></p>
+                <div className="signup-form">
+                    <form method="POST" onSubmit={register}>
+                        <div className="form-group">
+                            <label htmlFor="name">Name</label>
+                            <input value={name} type="text" onChange={(e) => setName(e.target.value)} name="name" id="name" className="form-control" placeholder="Enter your name" aria-describedby="helpId" required />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" name="email" id="email" className="form-control" placeholder="Enter your email" aria-describedby="helpId" required />
+                            {showerr && <div className="err" style={{ color: 'red', marginTop: '5px' }}>{showerr}</div>}
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="phone">Phone</label>
+                            <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" name="phone" id="phone" className="form-control" placeholder="Enter your phone number" aria-describedby="helpId" required />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="password">Password</label>
+                            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" className="form-control" placeholder="Enter your password" aria-describedby="helpId" required />
+                        </div>
+
+                        <button type="submit" className="btn btn-primary" style={{marginTop: '15px'}}>Submit</button>
+                    </form>
                 </div>
-                <form onSubmit={handleSubmit} className="signup-form">
-                    <div className="form-group">
-                        <label htmlFor="name">Name</label>
-                        <input type="text" name="name" id="name" value={formData.name} onChange={handleChange} className="form-control" placeholder="Enter your name" />
-                        {errors.name && <span className="error-text">{errors.name}</span>}
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="email">Email</label>
-                        <input type="email" name="email" id="email" value={formData.email} onChange={handleChange} className="form-control" placeholder="Enter your email" />
-                        {errors.email && <span className="error-text">{errors.email}</span>}
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="phone">Phone Number</label>
-                        <input type="tel" name="phone" id="phone" value={formData.phone} onChange={handleChange} className="form-control" placeholder="Enter 10-digit mobile number" />
-                        {errors.phone && <span className="error-text">{errors.phone}</span>}
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input type="password" name="password" id="password" value={formData.password} onChange={handleChange} className="form-control" placeholder="Create a password" />
-                        {errors.password && <span className="error-text">{errors.password}</span>}
-                    </div>
-                    <button type="submit" className="btn btn-primary">Submit</button>
-                </form>
             </div>
         </div>
     );

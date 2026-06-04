@@ -1,0 +1,6 @@
+ Invoke-RestMethod -Uri "http://localhost:8181/api/auth/register" -Method Post -ContentType "application/json" -Body '{"role": "Doctor", "name": "John Doe", "email": "johndoe@example.com", "phone": "1234567890", "password": "yourpassword"}'
+
+authtoken                                                                                            
+---------                                                                                            
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNmEyMTY0ZGIxNjQ4MThmYjIyMjgyM2JlIn0sImlhd...
+

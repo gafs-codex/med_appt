@@ -1,12 +1,15 @@
 const mongoose = require('mongoose');
-const mongoURI = "mongodb://root:B3p8wdfEuhnuZxXv6rQuxerS@172.21.103.206:27017/medmed?authSource=admin";
+
+// CHANGED: Now pointing to your local MongoDB service instead of the cloud IP
+const mongoURI = "mongodb://127.0.0.1:27017/medmed";
 
 const connectToMongo = async (retryCount) => {
     const MAX_RETRIES = 3;
     const count = retryCount ?? 0;
     try {
+        // Keeps the database name consistent with your assignment parameters
         await mongoose.connect(mongoURI, { dbName: 'stayhealthybeta1' });
-        console.info('Connected to Mongo Successfully')
+        console.info('Connected to Mongo Successfully');
 
         return;
     } catch (error) {
@@ -18,10 +21,9 @@ const connectToMongo = async (retryCount) => {
             throw new Error('Unable to connect to Mongo!');
         }
 
-        console.info(`Retrying, retry count: ${nextRetryCount}`)
+        console.info(`Retrying, retry count: ${nextRetryCount}`);
 
         return await connectToMongo(nextRetryCount);
-
     }
 };
 
