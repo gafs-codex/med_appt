@@ -6,10 +6,11 @@ function ReviewForm() {
     const [submittedData, setSubmittedData] = useState(null);
     const [formData, setFormData] = useState({ name: '', review: '', rating: 0 });
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [hoveredStar, setHoveredStar] = useState(0);
 
     const handleButtonClick = () => {
         setShowForm(true);
-        setIsButtonDisabled(true); // Disable button after opening the form
+        setIsButtonDisabled(true);
     };
 
     const handleChange = (e) => {
@@ -18,16 +19,28 @@ function ReviewForm() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (formData.rating === 0) {
+            alert('Please select a rating');
+            return;
+        }
         setSubmittedData(formData);
         setShowForm(false);
+    };
+
+    const renderStars = (rating) => {
+        return [1, 2, 3, 4, 5].map((num) => (
+            <span key={num} style={{ fontSize: '22px' }}>
+                {num <= rating ? '⭐' : '☆'}
+            </span>
+        ));
     };
 
     return (
         <div className="review-form-container">
             {!submittedData && (
-                <button 
-                    className="review-btn" 
-                    onClick={handleButtonClick} 
+                <button
+                    className="review-btn"
+                    onClick={handleButtonClick}
                     disabled={isButtonDisabled}
                 >
                     Click Here
@@ -36,25 +49,51 @@ function ReviewForm() {
 
             {showForm && (
                 <form className="feedback-form" onSubmit={handleSubmit}>
-                    <h2>Give Your Feedback</h2>
-                    <input name="name" placeholder="Your Name" onChange={handleChange} required />
-                    <textarea name="review" placeholder="Your Review" onChange={handleChange} required />
-                    
-                    {/* Rating Selector 1-5 */}
-                    <div className="rating-selector">
-                        <label>Rating:</label>
-                        {[1, 2, 3, 4, 5].map((num) => (
-                            <button 
-                                type="button" 
-                                key={num} 
-                                onClick={() => setFormData({...formData, rating: num})}
-                                style={{ backgroundColor: formData.rating === num ? 'gold' : 'white' }}
-                            >
-                                {num}
-                            </button>
-                        ))}
+                    <h2>Give Your Review</h2>
+
+                    <div className="form-field">
+                        <label htmlFor="name">Name:</label>
+                        <input
+                            id="name"
+                            name="name"
+                            type="text"
+                            placeholder="Enter your name"
+                            onChange={handleChange}
+                            value={formData.name}
+                            required
+                        />
                     </div>
-                    <button type="submit">Submit</button>
+
+                    <div className="form-field">
+                        <label htmlFor="review">Review:</label>
+                        <textarea
+                            id="review"
+                            name="review"
+                            placeholder="Write your review here"
+                            onChange={handleChange}
+                            value={formData.review}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-field">
+                        <label>Rating:</label>
+                        <div className="star-rating">
+                            {[1, 2, 3, 4, 5].map((num) => (
+                                <span
+                                    key={num}
+                                    className="star"
+                                    onClick={() => setFormData({ ...formData, rating: num })}
+                                    onMouseEnter={() => setHoveredStar(num)}
+                                    onMouseLeave={() => setHoveredStar(0)}
+                                >
+                                    {num <= (hoveredStar || formData.rating) ? '⭐' : '☆'}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+
+                    <button type="submit" className="submit-btn">Submit</button>
                 </form>
             )}
 
@@ -62,7 +101,7 @@ function ReviewForm() {
                 <div className="submitted-review">
                     <h3>Review Submitted!</h3>
                     <p><strong>Name:</strong> {submittedData.name}</p>
-                    <p><strong>Rating:</strong> {submittedData.rating}/5</p>
+                    <p><strong>Rating:</strong> {renderStars(submittedData.rating)}</p>
                     <p><strong>Review:</strong> {submittedData.review}</p>
                 </div>
             )}

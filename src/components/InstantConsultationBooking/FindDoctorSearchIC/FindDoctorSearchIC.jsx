@@ -6,24 +6,24 @@ const initSpeciality = [
     'Dentist', 'Gynecologist/obstetrician', 'General Physician', 'Dermatologist', 'Ear-nose-throat (ent) Specialist', 'Homeopath', 'Ayurveda'
 ];
 
-const FindDoctorSearch = () => {
+const FindDoctorSearch = ({ disabled = false }) => {
     const [doctorResultHidden, setDoctorResultHidden] = useState(true);
     const [searchDoctor, setSearchDoctor] = useState('');
     const [specialities, setSpecialities] = useState(initSpeciality);
     const navigate = useNavigate();
 
     const handleDoctorSelect = (speciality) => {
+        if (disabled) return;
         setSearchDoctor(speciality);
         setDoctorResultHidden(true);
         navigate(`/instant-consultation?speciality=${speciality}`);
         window.location.reload();
     };
 
-    // Filter specialities dynamically as the user types
     const handleSearchChange = (e) => {
+        if (disabled) return;
         const query = e.target.value;
         setSearchDoctor(query);
-
         const filtered = initSpeciality.filter(speciality =>
             speciality.toLowerCase().includes(query.toLowerCase())
         );
@@ -32,42 +32,58 @@ const FindDoctorSearch = () => {
 
     return (
         <div className='finddoctor'>
-            <center>
-                <h1>Find a doctor and Consult instantly</h1>
-                <div>
-                    <i style={{ color: '#3685fb', fontSize: '20rem' }} className="fa fa-user-md"></i>
-                </div>
-                <div className="home-search-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <div className="doctor-search-box">
-                        <input
-                            type="text"
-                            className="search-doctor-input-box"
-                            placeholder="Search doctors, clinics, hospitals, etc."
-                            value={searchDoctor}
-                            onChange={handleSearchChange}
-                            onFocus={() => setDoctorResultHidden(false)}
-                            // Slight timeout keeps dropdown open long enough for click to register
-                            onBlur={() => setTimeout(() => setDoctorResultHidden(true), 200)}
-                        />
+            <h1 style={{ textAlign: 'center' }}>Find a doctor and Consult instantly</h1>
+            <div style={{ textAlign: 'center' }}>
+                <i style={{ color: '#3685fb', fontSize: '20rem' }} className="fa fa-user-md"></i>
+            </div>
 
-                        <div className="search-doctor-input-results" hidden={doctorResultHidden}>
-                            {
-                                specialities.map(speciality => (
-                                    <div
-                                        className="search-doctor-result-item"
-                                        key={speciality}
-                                        // Using onMouseDown executes BEFORE the onBlur hides the box
-                                        onMouseDown={() => handleDoctorSelect(speciality)}
-                                    >
-                                        <span>{speciality}</span>
-                                        <span>SPECIALITY</span>
-                                    </div>
-                                ))
-                            }
-                        </div>
+            <div className="home-search-container">
+                <div className="doctor-search-box">
+                    <input
+                        type="text"
+                        className="search-doctor-input-box"
+                        placeholder={disabled ? "Search unavailable" : "Search doctors, clinics, hospitals, etc."}
+                        value={searchDoctor}
+                        onChange={handleSearchChange}
+                        onFocus={() => { if (!disabled) setDoctorResultHidden(false) }}
+                        onBlur={() => setTimeout(() => setDoctorResultHidden(true), 200)}
+                        disabled={disabled}
+                        style={{
+                            cursor: disabled ? 'not-allowed' : 'pointer',
+                            opacity: disabled ? 0.6 : 1,
+                            backgroundColor: disabled ? '#f5f5f5' : 'white'
+                        }}
+                    />
+
+                    <div
+                        className="search-doctor-input-results"
+                        style={{ display: doctorResultHidden || disabled ? 'none' : 'block' }}
+                    >
+                        {specialities.map(speciality => (
+                            <div
+                                className="search-doctor-result-item"
+                                key={speciality}
+                                onMouseDown={() => handleDoctorSelect(speciality)}
+                            >
+                                {/* span 1 — icon circle */}
+                                <span>
+                                    <i className="fa fa-user-md" style={{ color: '#3685fb', fontSize: '16px' }}></i>
+                                </span>
+                                {/* span 2 — speciality name */}
+                                <span>{speciality}</span>
+                                {/* span 3 — label */}
+                                <span>SPECIALITY</span>
+                            </div>
+                        ))}
                     </div>
                 </div>
-            </center>
+
+                {disabled && (
+                    <p style={{ color: 'red', fontSize: '13px', marginTop: '8px', textAlign: 'center' }}>
+                        Search is currently disabled.
+                    </p>
+                )}
+            </div>
         </div>
     );
 };

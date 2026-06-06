@@ -1,8 +1,9 @@
 .finddoctor {
     margin-top: 5%;
     font-family: sans-serif;
-    overflow: hidden;
+    overflow: visible !important;
 }
+
 
 .finddoctor .mainimg {
     width: 312px;
@@ -17,6 +18,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: visible;
 }
 
 .doctor-search-box {
@@ -24,13 +26,12 @@
     align-items: center;
     width: 430px;
     position: relative;
-    /* Fixed: Changed from absolute to relative to wrap elements nicely */
     margin-top: 25px;
     margin-bottom: 20px;
     box-shadow: rgba(0, 0, 0, 0.1) 0 -1px 0 0 inset;
     border-radius: 5px;
     height: auto;
-    /* Fixed: Changed from 100vh so it doesn't break your vertical spacing */
+    overflow: visible;
 }
 
 .doctor-search-box>img {
@@ -73,16 +74,16 @@
 .search-doctor-input-results {
     position: absolute;
     top: 42px;
-    /* Fixed: Changed from 55% to align it directly under the input box */
     left: 0;
     width: 100%;
-    z-index: 5;
-    max-height: 250px;
-    /* Adjusted to prevent overly elongated dropdown windows */
+    z-index: 9999;
+    max-height: 300px;
     overflow-y: auto;
     margin-top: 2px;
     border: 1px solid #555;
     background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .search-doctor-result-item {
@@ -120,7 +121,6 @@
     font-size: 11px;
     flex-grow: 1;
     color: #3685fb;
-    /* Changed to match theme link styles */
     text-align: right;
     text-transform: uppercase;
     font-weight: bold;
